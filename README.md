@@ -163,6 +163,12 @@ frictionAreas={[{damping: 0.5, influenceArea: {top: 0}}]}
 alertAreas={[{id: 'myArea', influenceArea: {top: 0}}]}
 ```
 
+* `touchableArea` - A polygon on the view which response to touches
+
+```jsx
+touchableArea={[{x: 0, y: 0}, {x: 100, y: 0}, {x: 100, y: 100}, {x: 0, y: 100}]}
+```
+
 * [`horizontalOnly`](https://github.com/wix/react-native-interactable/blob/master/PROPS.md#horizontalonly-boolean) - whether the view should be locked to horizontal movement only
 
 ```jsx
