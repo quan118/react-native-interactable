@@ -9,6 +9,7 @@
 #import "InteractableViewManager.h"
 #import "InteractableView.h"
 #import "InteractablePoint.h"
+#import "InteractablePoint2D.h"
 #import "InteractableArea.h"
 #import "InteractableSpring.h"
 #import "RCTConvert+Interactable.h"
@@ -32,6 +33,7 @@ RCT_EXPORT_VIEW_PROPERTY(springPoints, NSArray<InteractablePoint *>)
 RCT_EXPORT_VIEW_PROPERTY(gravityPoints, NSArray<InteractablePoint *>)
 RCT_EXPORT_VIEW_PROPERTY(frictionAreas, NSArray<InteractablePoint *>)
 RCT_EXPORT_VIEW_PROPERTY(alertAreas, NSArray<InteractablePoint *>)
+RCT_EXPORT_VIEW_PROPERTY(touchableArea, NSArray<InteractablePoint2D *>)
 RCT_EXPORT_VIEW_PROPERTY(boundaries, InteractableArea)
 RCT_EXPORT_VIEW_PROPERTY(dragWithSpring, InteractableSpring)
 RCT_EXPORT_VIEW_PROPERTY(dragToss, CGFloat)

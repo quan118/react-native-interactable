@@ -59,6 +59,18 @@ public class RNConvert {
         return interactablePoints;
     }
 
+    public static ArrayList<PointF> touchableArea(ReadableArray points) {
+        ArrayList touchableArea = new ArrayList(points.size());
+        for (int i = 0; i < points.size(); ++i) {
+            ReadableMap rawString =  points.getMap(i);
+            float x = PixelUtil.toPixelFromDIP(rawString.hasKey("x") ? rawString.getDouble("x") : 0);
+            float y = PixelUtil.toPixelFromDIP(rawString.hasKey("y") ? rawString.getDouble("y") : 0);
+            touchableArea.add(new PointF(x, y));
+        }
+
+        return touchableArea;
+    }
+
     public static PointF pointF(ReadableMap params) {
         float x = PixelUtil.toPixelFromDIP(params.hasKey("x") ? params.getDouble("x") : 0);
         float y = PixelUtil.toPixelFromDIP(params.hasKey("y") ? params.getDouble("y") : 0);

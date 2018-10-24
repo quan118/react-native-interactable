@@ -10,9 +10,10 @@
 #import <React/RCTConvert.h>
 
 @class InteractablePoint;
+@class InteractablePoint2D;
 
 @interface RCTConvert (Interactable)
 
 + (NSArray<InteractablePoint *> *)InteractablePointArray:(id)json;
-
++ (NSArray<InteractablePoint2D *> *) InteractablePoint2DArray:(id)json;
 @end

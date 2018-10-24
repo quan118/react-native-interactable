@@ -21,6 +21,10 @@ import com.wix.interactable.physics.PhysicsFrictionBehavior;
 import com.wix.interactable.physics.PhysicsGravityWellBehavior;
 import com.wix.interactable.physics.PhysicsSpringBehavior;
 
+import com.snatik.polygon.Polygon;
+import com.snatik.polygon.Point;
+import com.snatik.polygon.Line;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,6 +59,8 @@ public class InteractableView extends ViewGroup implements PhysicsAnimator.Physi
     private ArrayList<InteractablePoint> gravityPoints = new ArrayList<>();
     private ArrayList<InteractablePoint> frictionAreas = new ArrayList<>();
     private ArrayList<InteractablePoint> alertAreas = new ArrayList<>();
+    private ArrayList<PointF> touchableArea = new ArrayList<>();
+    private ArrayList<PointF> oldTouchableArea;
     private Set<String> insideAlertAreas = new HashSet<>();
 
     private InteractionListener listener;
@@ -62,6 +68,8 @@ public class InteractableView extends ViewGroup implements PhysicsAnimator.Physi
     private int mTouchSlop;
     private boolean isChildIsScrollContainer = false;
     private boolean skippedOneInterception;
+
+    private Polygon oldPolygon = null;
 
 
     public InteractableView(Context context) {
@@ -168,8 +176,28 @@ public class InteractableView extends ViewGroup implements PhysicsAnimator.Physi
         this.skippedOneInterception=false;
     }
 
+    private Polygon buildPolygon(ArrayList<PointF> points) {
+        if (points == null || points.size() == 0) return null;
+
+        Polygon.Builder polygonBuilder = Polygon.Builder();
+
+        for (PointF point: points) {
+            polygonBuilder.addVertex(new Point(point.x, point.y));
+        }
+        return polygonBuilder.build();
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Polygon polygon = null;
+        if (this.oldTouchableArea == this.touchableArea) polygon = this.oldPolygon;
+        else {
+            polygon = this.buildPolygon(this.touchableArea);
+            this.oldTouchableArea = this.touchableArea;
+            this.oldPolygon = polygon;
+        }
+
+        if (polygon != null && !polygon.contains(new Point(ev.getX(), ev.getY()))) return false;
 
         final int actionMasked = ev.getAction() & MotionEvent.ACTION_MASK;
 
@@ -485,6 +513,10 @@ public class InteractableView extends ViewGroup implements PhysicsAnimator.Physi
 
     public void setSnapPoints(ArrayList snapPoints) {
         this.snapPoints = snapPoints;
+    }
+
+    public void setTouchableArea(ArrayList touchableArea) {
+        this.touchableArea = touchableArea;
     }
 
     public void setAlertAreas(ArrayList<InteractablePoint> alertAreas) {

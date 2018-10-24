@@ -102,6 +102,11 @@ public class InteractableViewManager extends ViewGroupManager<InteractableView> 
         view.setSnapPoints(RNConvert.interactablePoints(snapPoints));
     }
 
+    @ReactProp(name = "touchableArea")
+    public void setTouchableArea(InteractableView view, @Nullable ReadableArray touchableArea) {
+        view.setTouchableArea(RNConvert.touchableArea(touchableArea));
+    }
+
     @ReactProp(name = "springPoints")
     public void setSprings(InteractableView view, @Nullable ReadableArray springs) {
         view.setSpringsPoints(RNConvert.interactablePoints(springs));

@@ -10,8 +10,18 @@
 #import "InteractablePoint.h"
 #import "InteractableArea.h"
 #import "InteractableSpring.h"
+#import "InteractablePoint2D.h"
 
 @implementation RCTConvert(Interactable)
+
++ (InteractablePoint2D *)InteractablePoint2D:(id)json
+{
+    json = [self NSDictionary:json];
+    InteractablePoint2D *point = [InteractablePoint2D new];
+    point.x = [self CGFloat:json[@"x"] ?: @(CGFLOAT_MAX)];
+    point.y = [self CGFloat:json[@"y"] ?: @(CGFLOAT_MAX)];
+    return point;
+}
 
 + (InteractablePoint *)InteractablePoint:(id)json
 {
@@ -54,5 +64,7 @@
 }
 
 RCT_ARRAY_CONVERTER(InteractablePoint)
+
+RCT_ARRAY_CONVERTER(InteractablePoint2D)
 
 @end

@@ -95,6 +95,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 @property (nonatomic, assign) CGPoint reactRelayoutCenterDeltaFromOrigin;
 @property (nonatomic) NSMutableSet *insideAlertAreas;
 @property (nonatomic) UIPanGestureRecognizer *pan;
+@property (nonatomic, weak) NSArray<InteractablePoint2D *> *oldTouchableArea;
+@property (nonatomic) UIBezierPath* oldPolygon;
 
 @property (nonatomic, assign) uint16_t coalescingKey;
 @property (nonatomic, assign) NSString* lastEmittedEventName;
@@ -363,6 +365,32 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     }
     return nil;
 }
+
+- (UIBezierPath *) buildTouchableArea:(NSArray<InteractablePoint2D* > *) points {
+    if (points == nil || [points count] == 0) return nil;
+    
+    UIBezierPath *polygon = [UIBezierPath new];
+    [polygon moveToPoint:[points[0] CGPointValue]];
+    for (int i = 1; i < [points count]; ++i) {
+        [polygon addLineToPoint:[points[i] CGPointValue]];
+    }
+    [polygon closePath];
+    return polygon;
+}
+
+- (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    UIBezierPath *polygon = nil;
+    if (self.oldTouchableArea == self.touchableArea) polygon = self.oldPolygon;
+    else {
+        polygon = [self buildTouchableArea:self.touchableArea];
+        self.oldPolygon = polygon;
+        self.oldTouchableArea = self.touchableArea;
+    }
+
+    if (polygon) return [polygon containsPoint:point];
+
+    return [super pointInside:point withEvent:event];
+};
 
 /*
  - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
